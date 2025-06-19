@@ -327,9 +327,34 @@ a, .back-button {
         opacity: 1;
     }
 } 
+ /* 상호작용 안내 텍스트 */
+    .interaction-guide {
+      position: fixed;
+      bottom: 60px;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 14px;
+      font-family: 'Pretendard', sans-serif;
+      z-index: 100;
+      pointer-events: none;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 0.4; }
+      50% { opacity: 0.8; }
+    }
+
   </style>
 </head>
 <body>
+    <!-- 상호작용 안내 텍스트 -->
+  <div class="interaction-guide" id="interactionGuide">
+    화면을 클릭해서 다양한 감정을 탐험해보세요.
+  </div>
+
   <!-- 오른쪽 내비게이션 메뉴 -->
 <div class="side-navigation">
   <a href="./heart.html" class="nav-dot" >
