@@ -25,7 +25,32 @@
     margin: 0 auto;          /* 화면 중앙 정렬 */
     min-width: 1200px;       /* 최소 폭 보장 */
 }
-@media screen and (min-width: 1024px) {
+
+/* 기본 슬라이드 정보 스타일 - 큰 화면용 (1025px 이상) */
+.slide-info {
+    position: absolute;
+    bottom: -60px;
+    left: 0;
+    right: 0;
+    width: 100%;
+    transform: translateY(20px);
+    padding: 15px 30px;
+    opacity: 0;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    pointer-events: none;
+    z-index: 10;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.slide-info.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* 큰 화면 스타일 */
+@media screen and (min-width: 1025px) {
     .portfolio-item {
         min-width: 240px;
         max-width: 280px;
@@ -49,10 +74,19 @@
         width: 40px;
         height: 40px;
     }
+    
+    /* 페이지네이션은 고정이므로 margin-top 제거 */
 }
-@media screen and (max-width: 1280px) {
+
+/* 중간 화면 스타일 (769px ~ 1024px) */
+@media screen and (max-width: 1024px) and (min-width: 769px) {
     .portfolio-item {
         min-width: calc(50% - 30px);
+        margin-bottom: 100px; /* 더 많은 여백 */
+    }
+    
+    .portfolio-container {
+        min-height: 700px; /* 더 높은 최소 높이 */
     }
 
     .slide-info-text {
@@ -62,7 +96,99 @@
     .designer-info {
         font-size: 18px;
     }
+    
+    /* 중간 화면에서는 슬라이드 아래에 표시하되 여백 확보 */
+    .slide-info {
+        position: absolute !important;
+        bottom: -80px !important; /* 더 아래로 */
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        transform: translateY(20px) !important;
+        padding: 15px 30px !important;
+        opacity: 0 !important;
+        transition: opacity 0.4s ease, transform 0.4s ease !important;
+        pointer-events: none !important;
+        z-index: 10 !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        background: rgba(0, 0, 0, 0.8) !important;
+        border-radius: 20px !important;
+        backdrop-filter: blur(10px) !important;
+    }
+    
+    .slide-info.show {
+        opacity: 1 !important;
+        transform: translateY(0) !important;
+    }
+    
+    /* 페이지네이션은 고정이므로 margin-top 제거 */
 }
+
+/* 작은 화면 스타일 (768px 이하) */
+@media screen and (max-width: 768px) {
+    .portfolio-item {
+        min-width: calc(100% - 30px);
+        margin-bottom: 120px; /* 가장 많은 여백 */
+    }
+    
+    .portfolio-container {
+        min-height: 800px; /* 가장 높은 최소 높이 */
+    }
+    
+    .slide-info-text {
+        font-size: 14px;
+    }
+    
+    .designer-info {
+        font-size: 16px;
+    }
+    
+    /* 작은 화면에서는 슬라이드 아래에 표시하되 충분한 여백 확보 */
+    .slide-info {
+        position: absolute !important;
+        bottom: -100px !important; /* 훨씬 더 아래로 */
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        transform: translateY(20px) !important;
+        padding: 12px 24px !important;
+        opacity: 0 !important;
+        transition: opacity 0.4s ease, transform 0.4s ease !important;
+        pointer-events: none !important;
+        z-index: 10 !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        background: rgba(0, 0, 0, 0.9) !important;
+        border-radius: 15px !important;
+        backdrop-filter: blur(10px) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    }
+    
+    .slide-info.show {
+        opacity: 1 !important;
+        transform: translateY(0) !important;
+    }
+    
+    /* 페이지네이션은 고정이므로 margin-top 제거 */
+    
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+    }
+    
+    .designer-info {
+        margin-left: 0;
+    }
+    
+    .status {
+        margin-top: 10px;
+    }
+}
+
 @media screen and (min-width: 2560px) {
     body {
         transform: scale(1.2);
@@ -81,7 +207,7 @@
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             overflow-x: hidden;
-            padding: 20px 20px 40px 20px; /* 상단 패딩을 40px에서 20px로 줄임 */
+            padding: 20px 20px 100px 20px; /* 하단 패딩 증가 (페이지네이션 공간 확보) */
             height: 100vh;
             display: flex;
             flex-direction: column;
@@ -117,23 +243,27 @@
         }
         
         .header {
-            display: grid;
-            grid-template-columns: 1fr auto 1fr;
+            display: flex;
+            justify-content: center;
             align-items: center;
             padding: 0 20px;
             margin-bottom: 40px; /* 60px에서 40px로 줄임 */
+            width: 100%;
         }
 
         .left {
-            justify-self: start;
+            display: none; /* 왼쪽 영역 숨김 */
         }
 
         .center {
-            justify-self: center;
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
         .right {
-            justify-self: end;
+            display: none; /* 오른쪽 영역 숨김 */
         }
         
         .logo {
@@ -172,10 +302,11 @@
         .portfolio-container {
             flex: 1;
             position: relative;
-            overflow: hidden;
+            overflow: visible; /* hidden에서 visible로 변경 */
             display: flex;
             align-items: center;
             pointer-events: auto; /* 기본 포인터 이벤트 허용 */
+            min-height: 600px; /* 최소 높이 설정 */
         }
         
         .portfolio-slider {
@@ -196,6 +327,7 @@
             width: 80px;
             pointer-events: auto; /* 개별 아이템은 클릭 가능 */
             position: relative; /* 텍스트 위치 지정을 위해 추가 */
+            margin-bottom: 80px; /* 아래쪽 여백 추가 */
         }
         
         .portfolio-item-content {
@@ -245,37 +377,14 @@
             display: none; /* 기존 사이트명 숨김 */
         }
         
-        /* 새로운 슬라이드 정보 표시 영역 - 각 아이템 아래 그리드 형태 */
-        .slide-info {
-            position: absolute;
-            bottom: -60px; /* 슬라이드 아래쪽에 위치 */
-            left: 0;
-            right: 0;
-            width: 100%;
-            transform: translateY(20px); /* 초기 위치를 아래로 */
-            padding: 15px 30px;
-            opacity: 0;
-            transition: opacity 0.4s ease, transform 0.4s ease;
-            pointer-events: none;
-            z-index: 10;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .slide-info.show {
-            opacity: 1;
-            transform: translateY(0); /* 위로 올라오는 효과 */
-        }
-        
+        /* 기본 슬라이드 정보 스타일 - 모든 .slide-info-text에 적용 */
         .slide-info-text {
-            color: white;
-            font-size: 16px;
-            font-weight: 500;
-            text-align: center;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            white-space: nowrap; /* 텍스트 줄바꿈 방지 */
+            color: white !important;
+            font-weight: 500 !important;
+            text-align: center !important;
+            letter-spacing: 1px !important;
+            text-transform: uppercase !important;
+            white-space: nowrap !important;
         }
         
         .nav-buttons {
@@ -344,8 +453,13 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-top: 60px; /* 텍스트 공간을 고려해 늘림 */
             gap: 8px;
+            position: fixed; /* 화면 하단에 고정 */
+            bottom: 30px; /* 하단에서 30px 떨어진 위치 */
+            left: 0; /* 전체 너비 시작점 */
+            right: 0; /* 전체 너비 끝점 */
+            width: 100%; /* 전체 너비 사용 */
+            z-index: 1000; /* 다른 요소들 위에 표시 */
         }
         
         .pagination-dot {
@@ -374,32 +488,6 @@
         
         .fade-in {
             animation: fadeIn 2s ease forwards;
-        }
-        
-        @media (max-width: 992px) {
-            .portfolio-item {
-                min-width: calc(50% - 30px);
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .header {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 20px;
-            }
-            
-            .portfolio-item {
-                min-width: calc(100% - 30px);
-            }
-            
-            .designer-info {
-                margin-left: 0;
-            }
-            
-            .status {
-                margin-top: 10px;
-            }
         }
         
         .portfolio-video {
